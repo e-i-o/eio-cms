@@ -5,7 +5,7 @@ def replace_file(src, dest, sub):
     with open(src) as f:
         content = f.read()
         for k in sub:
-            content = content.replace('$' + k, sub[k])
+            content = content.replace('$' + k, str(sub[k]))
         with open(dest, 'w') as fout:
             fout.write(content)
 

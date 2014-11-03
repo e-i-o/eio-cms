@@ -22,5 +22,5 @@ setup(name='EIO-CMS',
       scripts=["scripts/cmsEIOContestWebServer",
                "scripts/cmsRunAll",
                "scripts/cmsKillAll"],
-      entry_points={'console_scripts': ['cmsSetEIOConfig=eio_cms.confighelper:main']}
+      entry_points={'console_scripts': ['cmsCreateConfigFile=eio_cms.confighelper:main']}
       )

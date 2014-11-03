@@ -1,0 +1,5 @@
+#! /bin/bash
+echo 'Attempting to kill cmsLogService and cmsResourceService...'
+ps ax | grep cmsLogService | cut -f 1 -d ' '  | xargs kill
+ps ax | grep cmsResourceService | cut -f 1 -d ' '  | xargs kill
+

@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 from setuptools import setup, find_packages
 import sys, os
 
@@ -17,10 +18,9 @@ setup(name='EIO-CMS',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          # -*- Extra requirements: -*-
-      ],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
+      install_requires=["cms",],
+      scripts=["scripts/cmsEIOContestWebServer",
+               "scripts/cmsRunAll",
+               "scripts/cmsKillAll"],
+      entry_points={'console_scripts': ['cmsSetEIOConfig=eio_cms.confighelper:main']}
       )

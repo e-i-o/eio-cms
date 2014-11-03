@@ -1,0 +1,12 @@
+#! /bin/bash
+if [ -e isolate/isolate ];
+then
+    echo "Do not launch this from the cms/ directory, please!"
+    exit 1
+fi
+echo "Launching CMS services"
+screen -S log -d -m cmsLogService
+screen -S resource -d -m cmsResourceService -a 1
+
+screen -ls
+

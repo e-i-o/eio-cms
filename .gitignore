@@ -1,2 +1,6 @@
+.gitignore
 setup.cfg
 *.pyc
+build/
+dist/
+*.egg-info/

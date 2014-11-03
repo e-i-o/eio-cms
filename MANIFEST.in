@@ -1,1 +1,3 @@
-recursive-include eio_cms/confighelper/conf/*.conf
+recursive-include eio_cms/confighelper/conf *.conf
+recursive-include eio_cms/server/static *
+recursive_include eio_cms/server/templates *.html

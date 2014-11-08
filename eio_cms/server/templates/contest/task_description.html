@@ -118,7 +118,7 @@
 {% end %}
 {% set compilation_commands = task_type.get_compilation_commands([x.filename for x in task.submission_format]) %}
 {% if compilation_commands is not None %}
-{% set compilation_commands = {lang: compilation_commands[lang] for lang in contest.languages} %}
+{% set compilation_commands = {lang: compilation_commands[lang][0:1] for lang in contest.languages} %}
 <tr>
     <th rowspan="{{ len(compilation_commands) }}">{{ _("Compilation commands") }}</th>
     {% for i, (l, c) in enumerate(sorted(compilation_commands.iteritems())) %}

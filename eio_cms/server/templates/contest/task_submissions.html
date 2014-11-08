@@ -104,7 +104,7 @@ $(document).ready(function () {
     <div class="span5">
         <form class="form-horizontal" enctype="multipart/form-data" action="{{ url_root }}/tasks/{{ encode_for_url(task.name) }}/submit" method="POST">
             <fieldset>
-{% for idx, filename in enumerate(x.filename for x in task.submission_format) %}
+{% for idx, filename in enumerate(x.filename for x in sorted(task.submission_format)) %}
                 <div class="control-group">
                     <label class="control-label" for="input{{ idx }}">{{ filename.replace(".%l", "") }}</label>
                     <div class="controls">

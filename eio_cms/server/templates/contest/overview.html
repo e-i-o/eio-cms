@@ -159,7 +159,7 @@
             <th>{{ _("Name") }}</th>
             <th>{{ _("Time limit") }}</th>
             <th>{{ _("Memory limit") }}</th>
-            <th>{{ _("Type") }}</th>
+            <!--th>{{ _("Type") }}</th-->
             <th>{{ _("Files") }}</th>
 {% if tokens_contest != 0 and tokens_tasks != 0 %}
             <th>{{ _("Tokens") }}</th>
@@ -190,7 +190,7 @@
         {{ _("N/A") }}
     {% end %}
             </td>
-            <td>{{ get_task_type(dataset=t_iter.active_dataset).name }}</td>
+            <!-- td>{{ get_task_type(dataset=t_iter.active_dataset).name }}</td -->
             <td>{{ " ".join(a.filename.replace("%l", extensions) for a in t_iter.submission_format) }}</td>
     {% if tokens_contest != 0 and tokens_tasks != 0 %}
             <td>

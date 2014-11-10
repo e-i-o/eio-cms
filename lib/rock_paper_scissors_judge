@@ -1,0 +1,108 @@
+#!/bin/env python2.7
+
+import argparse
+import traceback
+import time
+from subprocess import Popen, PIPE
+from select import select
+import os
+import logging
+log = logging.getLogger(__name__)
+
+value_to_id = {'K':0, 'P': 1, 'R': 2}
+id_to_value = 'KPRL'
+
+def read_char(app, timeout):
+    r, w, e = select([ app.stdout ], [], [], timeout)
+    if app.stdout not in r:
+        return None
+    return app.stdout.read(1)
+    
+def read_turn(app, timeout):
+    c = read_char(app, timeout)
+    if c is None:
+        return None
+    safe = 10
+    while c in ['\r','\n', '\t', ' '] and safe > 0:
+        safe -= 1
+        c = read_char(app, timeout)
+        if c is None:
+            return None
+    if c not in 'KPR':
+        raise Exception("Invalid value output by the program: %s" % c)
+    return value_to_id[c]
+
+def write_data(app, data, timeout):
+    w = []
+    try:
+        r, w, e = select([], [ app.stdin ], [], timeout)
+    except:
+        traceback.print_exc()
+        print timeout
+    if app.stdin in w:
+        app.stdin.write(data)
+        app.stdin.flush()
+
+def write_turn(app, turn, timeout):
+    write_data(app, id_to_value[turn] + '\n', timeout)
+
+def round_score(pos, neg):
+    d = (pos - neg) % 3
+    if d == 2:
+        d = -1
+    return d
+    
+def main():
+    parser = argparse.ArgumentParser(description='Judge for the Rock-Paper-Scissors task in Estonian Open Informatics Contest November 2014')
+    parser.add_argument('positive_opponent', help='command launching the program to be tested (each win of this program counts as +1)')
+    parser.add_argument('negative_opponent', help='command launching the judge program (each win of this program counts as -1)')
+    parser.add_argument('--rounds', help='Number of rounds to execute', type=int, default=100000)
+    parser.add_argument('--time', help='Time limit in seconds', type=int, default=60)
+    parser.add_argument('--debug', help='Whether detailed exception tracebacks should be printed (otherwise only prints basic info)', action='store_true')
+    args = parser.parse_args()
+    if args.debug:
+        logging.basicConfig(level=logging.DEBUG)
+
+    try:
+        judge = Popen(args.negative_opponent.split(), stdin=PIPE, stdout=PIPE, env={}, universal_newlines=True)
+        player = Popen(args.positive_opponent.split(), stdin=PIPE, stdout=PIPE, env={}, universal_newlines=True)
+        start_time = time.time()
+        rounds = 0
+        score = 0
+        while rounds < args.rounds:
+            elapsed = time.time() - start_time
+            remaining = args.time - elapsed
+            if (remaining <= 0):
+                break
+            rounds += 1
+            log.debug("Round %d. Elapsed %d. Remaining %d", rounds, elapsed, remaining)
+            j = read_turn(judge, remaining)
+            p = read_turn(player, remaining)
+            if j is None or p is None:
+                break
+            score += round_score(p, j)
+            log.debug("Turns: %s %s. New score: %d.", j, p, score)
+            elapsed = time.time() - start_time
+            remaining = args.time - elapsed
+            if rounds < args.rounds and remaining > 0:
+                write_turn(judge, p, remaining)
+                write_turn(player, j, remaining)
+            else:
+                write_turn(judge, 3, 1)
+                write_turn(player, 3, 1)
+        log.debug("Ran a total of %d rounds in %d seconds", rounds, time.time() - start_time)
+        judge.kill()
+        player.kill()
+        print max(0, score)
+        print "Ran a total of %d rounds with final score %d." % (rounds, score)
+
+    except Exception, e:
+        if args.debug:
+            traceback.print_exc()
+        else:
+            print 0
+            print "Failure during judging: %s" % str(e) 
+
+if __name__ == '__main__':
+    main()
+       

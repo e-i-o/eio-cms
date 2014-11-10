@@ -29,7 +29,8 @@ $(document).on("click", "#submission_list tbody tr td.status .details", function
 
 function get_score_class (score, max_score) {
     if (score <= 0) {
-        return "score_0";
+        if (max_score > 0) return "score_0";
+        else return "";
     } else if (score >= max_score) {
         return "score_100";
     } else {
@@ -38,6 +39,7 @@ function get_score_class (score, max_score) {
 }
 
 update_submission_row = function (submission_id, data) {
+    console.log(data);
     var row = $("#submission_list tbody tr[data-submission=\"" + submission_id + "\"]");
     row.attr("data-status", data["status"]);
     row.children("td.status").html(data["status_text"]);
@@ -104,7 +106,7 @@ $(document).ready(function () {
     <div class="span5">
         <form class="form-horizontal" enctype="multipart/form-data" action="{{ url_root }}/tasks/{{ encode_for_url(task.name) }}/submit" method="POST">
             <fieldset>
-{% for idx, filename in enumerate(x.filename for x in sorted(task.submission_format)) %}
+{% for idx, filename in enumerate(sorted([x.filename for x in task.submission_format])) %}
                 <div class="control-group">
                     <label class="control-label" for="input{{ idx }}">{{ filename.replace(".%l", "") }}</label>
                     <div class="controls">
@@ -205,7 +207,7 @@ $(document).ready(function () {
         <col class="time"/>
 {% end %}
         <col class="status"/>
-{% if score_type is not None and score_type.max_public_score != 0 %}
+{% if score_type is not None %}
         <col class="public_score"/>
         <col class="total_score"/>
 {% else %}
@@ -224,7 +226,7 @@ $(document).ready(function () {
             <th class="time">{{ _("Time") }}</th>
 {% end %}
             <th class="status">{{ _("Status") }}</th>
-{% if score_type is not None and score_type.max_public_score != 0 %}
+{% if score_type is not None %}
             <th class="public_score">{{ _("Public score") }}</th>
             <th class="total_score">{{ _("Total score") }}</th>
 {% else %}

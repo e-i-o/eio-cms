@@ -105,6 +105,9 @@
     {% else %}
         {{ _("%(seconds)g seconds") % {"seconds": task.active_dataset.time_limit} }}
     {% end %}
+    {% if task.active_dataset.time_limit_python is not None %}
+        (Python: {{ _("%(seconds)g seconds") % {"seconds": task.active_dataset.time_limit_python} }})
+    {% end %}
             </td>
         </tr>
 {% end %}

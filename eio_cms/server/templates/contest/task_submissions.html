@@ -81,7 +81,7 @@ $(document).ready(function () {
 
 {% block core %}
 
-{% if actual_phase == 0 %}
+{% if actual_phase == 0 and (current_user.division is None or (task.divisions is not None and current_user.division in task.divisions.split())) %}
 
 <div class="span9 task_submissions">
 

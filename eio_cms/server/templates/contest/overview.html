@@ -139,8 +139,6 @@
 {% end %}
 </div>
 
-
-
 {% if actual_phase == 0 %}
 <h2>{{ _("Task overview") }}</h2>
 
@@ -169,6 +167,7 @@
     <tbody>
 {% set extensions = "[%s]" %  ("|".join(LANGUAGE_TO_SOURCE_EXT_MAP[lang][1:] for lang in contest.languages)) %}
 {% for t_iter in contest.tasks %}
+{% if current_user.division is None or (t_iter.divisions is not None and current_user.division in t_iter.divisions.split()) %}
         <tr>
             <th>{{ t_iter.name }}</th>
             <td>{{ t_iter.title }}</td>
@@ -202,6 +201,7 @@
             </td>
     {% end %}
         </tr>
+{% end %} 
 {% end %}
     </tbody>
 </table>

@@ -36,8 +36,6 @@
     <div class="main_statements">
         <p>
             {{ _("The statement for this task is available in multiple versions, in different languages.") }}
-            {{ _("You can see (and download) all of them using the list on the right.") }}
-            {{ _("Some suggested translations follow.") }}
         </p>
     {% set task_primary = json.loads(task.primary_statements) %}
     {% for statement in sorted(task.statements.itervalues(), key=lambda x: x.language_name) %}
@@ -64,7 +62,7 @@
         {% end %}
     {% end %}
     </div>
-    <div class="all_statements well">
+    <!-- div class="all_statements well">
         <div>
             <ul>
     {% for statement in sorted(task.statements.itervalues(), key=lambda x: x.language_name) %}
@@ -80,7 +78,7 @@
     {% end %}
             </ul>
         </div>
-    </div>
+    </div-->
 </div>
 {% end %}
 
@@ -106,6 +104,9 @@
         {{ _("%(seconds)g second") % {"seconds": task.active_dataset.time_limit} }}
     {% else %}
         {{ _("%(seconds)g seconds") % {"seconds": task.active_dataset.time_limit} }}
+    {% end %}
+    {% if task.active_dataset.time_limit_python is not None %}
+        (Python: {{ _("%(seconds)g seconds") % {"seconds": task.active_dataset.time_limit_python} }})
     {% end %}
             </td>
         </tr>

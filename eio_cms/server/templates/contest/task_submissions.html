@@ -148,6 +148,8 @@ $(document).ready(function () {
 
 <h2 style="margin: 40px 0 10px">{{ _("Previous submissions") }}</h2>
 
+<p>{{ _("NB: Only the score of your most recent submission counts!") }}</p>
+
 {% if tokens_contest != 0 and tokens_tasks != 0 %}
 <div style="padding-bottom:10px">
     {% set tokens_info = contest.tokens_available(current_user.username, task.name, timestamp) %}

@@ -166,7 +166,7 @@ $(document).ready(function () {
                             </li>
     {% if actual_phase == 0 %}
         {% for t_iter in contest.tasks %}
-        {% if current_user.division is None or (t_iter.divisions is not None and current_user.division in t_iter.divisions.split()) %} 
+        {% if current_user.division is None or t_iter.divisions is None or (t_iter.divisions is not None and current_user.division in t_iter.divisions.split()) %} 
                             <li class="nav-header">
                                 {{ t_iter.name }}
                             </li>
